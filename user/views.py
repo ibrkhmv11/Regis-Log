@@ -1,7 +1,7 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, redirect
 from django.views import View
-
-from user.forms import RegisterForm
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm , RegisterForm
 
 def home(request):
     return render(request,'home.html')
@@ -21,10 +21,6 @@ class RegisterView(View):
             return redirect('home')
         return render(request,'register.html',{'form':form})
 
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib.auth import authenticate, login
-from .forms import LoginForm
 
 class LoginView(View):
 
