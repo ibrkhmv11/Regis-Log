@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'first_name', 'last_name' , 'year' , 'password']
@@ -38,13 +39,14 @@ class LoginForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+
         username = cleaned_data.get('username')
         password = cleaned_data.get('password')
 
         if username and password:
-            user = authenticate(username=username, password=password)
+            self.user_cache = authenticate(username=username, password=password)
 
-            if user is None:
-                raise ValidationError("Foydalanuvchi nomi yoki parol noto'g'ri!")
+            if self.user_cache is None:
+                raise forms.ValidationError("Username yoki parol xato. Qaytadan urinib ko'ring!")
 
         return cleaned_data

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from .forms import LoginForm , RegisterForm
 
 def home(request):
@@ -32,16 +32,7 @@ class LoginView(View):
         form = LoginForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-
-            user = authenticate(username=username, password=password)
-
-            if not user:
-
-                form.add_error(None, 'Username yoki parol xato.')
-                return render(request, 'login.html', {'form': form})
-
+            user = form.user_cache
             login(request, user)
             return redirect('home')
 
